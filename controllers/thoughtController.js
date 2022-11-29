@@ -1,4 +1,4 @@
-const Thought = require("../models/Thought");
+const { Thought, User } = require("../models");
 
 module.exports = {
   getThoughts(req, res) {
@@ -28,6 +28,14 @@ module.exports = {
 
   createThought(req, res) {
     Thought.create(req.body)
+      .then((thought) => {
+        console.log(thought._id);
+        return User.findOneAndUpdate(
+          { username: req.body.username },
+          { $addToSet: { thoughts: thought._id } },
+          { runValidators: true, new: true }
+        );
+      })
       .then((thought) => res.json(thought))
       .catch((err) => res.status(500).json(err));
   },
@@ -57,5 +65,34 @@ module.exports = {
         console.log(err);
         res.status(500).json(err);
       });
+  },
+
+  addReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: "No thought with this id!" })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+
+  removeReaction(req, res) {
+    console.log("you are trying to delete some shit!");
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: "No thought with this id!" })
+          : res.json(thought)
+      )
+      .catch((err) => res.status(500).json(err));
   },
 };

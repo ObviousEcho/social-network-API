@@ -51,10 +51,11 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No such user exists" })
+          // : Thought.deleteMany({ _id: { $in: user.thoughts } })
           : res.json({ message: "User successfully deleted" })
       )
+      // .then(() => res.json({ message: "User successfully deleted" }))
       .catch((err) => {
-        console.log(err);
         res.status(500).json(err);
       });
   },
@@ -65,10 +66,10 @@ module.exports = {
       { $addToSet: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     )
-      .then((user) =>
-        !user
+      .then((userData) =>
+        !userData
           ? res.status(404).json({ message: "No user found with that id" })
-          : res.json(user)
+          : res.json(userData)
       )
       .catch((err) => res.status(500).json(err));
   },
