@@ -29,7 +29,6 @@ module.exports = {
   createThought(req, res) {
     Thought.create(req.body)
       .then((thought) => {
-        console.log(thought._id);
         return User.findOneAndUpdate(
           { username: req.body.username },
           { $addToSet: { thoughts: thought._id } },
@@ -82,7 +81,6 @@ module.exports = {
   },
 
   removeReaction(req, res) {
-    console.log("you are trying to delete some shit!");
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $pull: { reactions: { reactionId: req.params.reactionId } } },
