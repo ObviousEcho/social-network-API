@@ -47,33 +47,15 @@ module.exports = {
   },
 
   // delete user and associated thoughts:
-
-  // deleteUser(req, res) {
-  //   User.findOne({ _id: req.params.userId })
-  //     .select("-__v")
-  //     .then((result) => {
-  //       const userName = result.username;
-  //       User.findOneAndRemove({ _id: req.params.userId })
-  //         .then(async (user) =>
-  //           !user
-  //             ? res.status(404).json({ message: "No such user exists" })
-  //             : await Thought.deleteMany({username: userName})
-  //         )
-  //         .then(() => res.json({ message: "User Successfully deleted" }));
-  //     })
-
-  //     .catch((err) => {
-  //       res.status(500).json(err);
-  //     });
-  // },
-
   deleteUser(req, res) {
     User.findOneAndRemove({ _id: req.params.userId })
-      .then((user) =>
+      .then(async (user) =>
         !user
           ? res.status(404).json({ message: "No such user exists" })
-          : res.json({ message: "User successfully deleted" })
+          : await Thought.deleteMany({ _id: { $in: user.thoughts } })
       )
+      .then(() => res.json({ message: "User Successfully deleted" }))
+
       .catch((err) => {
         res.status(500).json(err);
       });
