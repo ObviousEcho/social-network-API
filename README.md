@@ -27,7 +27,7 @@ The return object should look like this:
 
 ## Conclusions
 
-The project served an as introduction to MongoDb and NoSQL databases.  The biggest challenge I experienced, having recently spend a significant amount of time working with relational databases, was simply the syntactical difference of NoSQL vs. SQL.  The usage of Mongoose provided a loose structure which aided in joining data from one collection to the next.
+The project served an as introduction to MongoDb and NoSQL databases.  The biggest challenge I experienced, having recently spent a significant amount of time working with relational databases, was simply the syntactical difference of NoSQL vs. SQL.  The usage of Mongoose provided a loose structure which aided in joining data from one collection to the next.
 
 ##  Check it out
 
